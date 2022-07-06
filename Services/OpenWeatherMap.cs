@@ -31,7 +31,7 @@ public class OpenWeatherMap : IWeatherApi {
     WeatherResponse weatherResponse = new WeatherResponse();
     weatherResponse.HourlyWeathers = response.list.Select<Data, HourlyWeather>(d => new HourlyWeather {
       Description = d.weather[0].description,
-      Icon = d.weather[0].icon,
+      Icon = _configuration["OpenWeatherMap:IconUrl"] + d.weather[0].icon + ".png",
       MaxTemp = d.main.temp_max,
       MinTemp = d.main.temp_min,
       Timestamp = d.dt

@@ -119,7 +119,7 @@ function HourlyWeather({ data }) {
         {data.description}
       </td>
       <td>
-        {data.icon}
+        <img src={data.icon} alt="Weather condition icon"/>
       </td>
     </tr>
   )
