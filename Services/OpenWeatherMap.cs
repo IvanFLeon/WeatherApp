@@ -35,7 +35,7 @@ public class OpenWeatherMap : IWeatherApi {
       City = response.city.name,
       Coordinates = new Coordinates {
         Latitude = response.city.coord.lat,
-        Longitue = response.city.coord.lon
+        Longitude = response.city.coord.lon
       }
     };
 

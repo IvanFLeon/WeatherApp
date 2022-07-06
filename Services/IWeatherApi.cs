@@ -35,5 +35,5 @@ public class Location {
 
 public class Coordinates {
   public float Latitude { get; set; }
-  public float Longitue { get; set; }
+  public float Longitude { get; set; }
 }
