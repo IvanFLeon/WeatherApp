@@ -1,10 +1,10 @@
 import { fetch, json } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import WeatherCard from "../../components/WeatherCard";
 import { Dialog } from "@reach/dialog";
 import dialogStyles from "@reach/dialog/styles.css";
-import { ClientOnly } from "remix-utils";
+import { ClientOnly, useHydrated } from "remix-utils";
 import Favorite from "../../components/Favorite.client";
 
 export function links() {
@@ -75,6 +75,7 @@ export async function loader({request}) {
 export default function Weather() {
   const { data: {dailyWeather, location} } = useLoaderData();
   const [selectedCard, selectCard] = useState("");
+  const isHydrated = useHydrated();
 
   const WeatherCards = Object.entries(dailyWeather).map(([key, value]) => 
     <WeatherCard date={key} value={value} key={key} openCard={() => {
@@ -92,9 +93,7 @@ export default function Weather() {
   return (
     <div>
       <h1>{location.city}</h1>
-      <ClientOnly>
-        {() => <Favorite location={location}/>}
-      </ClientOnly>
+      {isHydrated && <Favorite location={location} key={location.city}/>}
       {WeatherCards}
       <Dialog aria-label="Day weather information" isOpen={!!selectedCard} onDismiss={() => selectCard("")}>
         {HourlyWeathers}
