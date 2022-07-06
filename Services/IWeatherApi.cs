@@ -1,6 +1,7 @@
 public interface IWeatherApi {
   Task<WeatherResponse> GetWeatherByCity(string city);
   Task<WeatherResponse> GetWeatherByZipcodeCountrycode(string zipcode, string countrycode);
+  Task<WeatherResponse> GetWeatherByLocation(string latitude, string longitude);
 }
 
 public class WeatherResponse {

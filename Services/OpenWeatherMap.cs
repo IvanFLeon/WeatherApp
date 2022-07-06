@@ -21,6 +21,12 @@ public class OpenWeatherMap : IWeatherApi {
     return Convert(await response.Content.ReadFromJsonAsync<OpenWeatherResponse>());
   }
 
+  public async Task<WeatherResponse> GetWeatherByLocation(string latitude, string longitude) {
+    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?lat={latitude}&lon={longitude}&appid={apiKey}");
+    response.EnsureSuccessStatusCode();
+    return Convert(await response.Content.ReadFromJsonAsync<OpenWeatherResponse>());
+  }
+
   private WeatherResponse Convert(OpenWeatherResponse response) {
     WeatherResponse weatherResponse = new WeatherResponse();
     weatherResponse.HourlyWeathers = response.list.Select<Data, HourlyWeather>(d => new HourlyWeather {

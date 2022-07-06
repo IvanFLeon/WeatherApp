@@ -1,5 +1,5 @@
 import { fetch, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useCatch, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import WeatherCard from "../../components/WeatherCard";
 import { Dialog } from "@reach/dialog";
@@ -20,18 +20,27 @@ export async function loader({request}) {
   };
 
   const url = new URL(request.url);
-  const search = url.searchParams.get("search");
-  const timeZone = url.searchParams.get("timezone")
-  //if (city) {
-  //  const data = await fetch(`https://localhost:7175/WeatherForecast/City?name=${city}`)
-  //}
-  //else if (zipcode && countrycode) {
-  //  const data = await fetch(`https://localhost:7175/WeatherForecast/Zipcode?zipcode=${zipcode}&count`)
-  //}
-  //if (data.ok) {
-  //  console.log(await data.json())
-  //}
-  const res = await fetch(`https://localhost:7175/WeatherForecast/City?name=Mexicali`)
+  const searchtype = url.searchParams.get("searchtype");
+  const query = url.searchParams.get('q');
+  const timeZone = url.searchParams.get("timezone") ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  var res;
+  switch(searchtype) {
+    case 'city':
+      res = await fetch(`https://localhost:7175/WeatherForecast/City?name=${query}`);
+      break;
+    case 'zipcode':
+      const [zipcode, countrycode] = query.split(',');
+      res = await fetch(`https://localhost:7175/WeatherForecast/Zipcode?zipcode=${zipcode}&countrycode=${countrycode}`);
+      break;
+    case 'location':
+      const [latitude,longitude] = query.split(',');
+      res = await fetch(`https://localhost:7175/WeatherForecast/Location?latitude=${latitude}&longitude=${longitude}`);
+      break;
+    default:
+      throw new Error("Invalid searchtype please use one of the following: city, zipcode, location");
+  }
+
   if (res.ok) {
     const weatherData = await res.json();
 
@@ -55,11 +64,10 @@ export async function loader({request}) {
       }
     }
 
-
     return json({data: { dailyWeather, location: weatherData.location}})
   }
   else {
-    throw new Error();
+    throw json({message: "Couldn't load the weather location you were looking for :("}, {status: 404});
   }
 
 }
@@ -73,8 +81,14 @@ export default function Weather() {
       selectCard(key)
     }}/>)
 
-  const HourlyWeathers = dailyWeather[selectedCard]?.hourlyWeather.map(hw => 
-    <HourlyWeather data={hw} key={hw.timestamp}/>)
+  const HourlyWeathers =
+  (<table>
+    <tbody>
+    {dailyWeather[selectedCard]?.hourlyWeather.map(hw => 
+      <HourlyWeather data={hw} key={hw.timestamp}/>)}
+    </tbody>
+  </table>)
+
   return (
     <div>
       <h1>{location.city}</h1>
@@ -82,10 +96,8 @@ export default function Weather() {
         {() => <Favorite location={location}/>}
       </ClientOnly>
       {WeatherCards}
-      <Dialog isOpen={!!selectedCard} onDismiss={() => selectCard("")}>
-        <table>
-          {HourlyWeathers}
-        </table>
+      <Dialog aria-label="Day weather information" isOpen={!!selectedCard} onDismiss={() => selectCard("")}>
+        {HourlyWeathers}
       </Dialog>
     </div>
   )
@@ -113,3 +125,10 @@ function HourlyWeather({ data }) {
   )
 }
 
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  return (
+    <h2>{caught.data.message}</h2>
+  )
+}

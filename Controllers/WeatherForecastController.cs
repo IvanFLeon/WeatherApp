@@ -37,4 +37,15 @@ public class WeatherForecastController : ControllerBase
             return NotFound($"Couldn't find weather for zipcode {zipcode} in {countrycode}");
         }
     }
+
+    [HttpGet]
+    public async Task<ActionResult> Location(string latitude, string longitude)
+    {
+        try {
+            return Ok(await _weatherApi.GetWeatherByLocation(latitude, longitude));
+        }
+        catch {
+            return NotFound($"Couldn't find weather for latitude {latitude} and longitude {longitude}");
+        }
+    }
 }

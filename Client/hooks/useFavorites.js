@@ -1,5 +1,5 @@
 export default function useFavorites() {
-  const getKey = (item) => `F.${item.city}.${item.coordinates.latitude}.${item.coordinates.longitude}`;
+  const getKey = (item) => `F.${item.coordinates.latitude}.${item.coordinates.longitude}`;
 
   const favorites = {
     set: (item) => {
@@ -10,6 +10,17 @@ export default function useFavorites() {
     },
     get: (item) => {
       return JSON.parse(localStorage.getItem(getKey(item)));
+    },
+    getAll: () => {
+      const ls =  {...localStorage};
+      Object.keys(ls).forEach(k => {
+        if(!k.match('F.*'))
+          delete ls[k];
+        else
+          ls[k] = JSON.parse(ls[k])
+      });
+
+      return ls;
     }
   } 
 
