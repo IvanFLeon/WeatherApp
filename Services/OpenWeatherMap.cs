@@ -1,10 +1,13 @@
+using Microsoft.Extensions.Configuration;
 public class OpenWeatherMap : IWeatherApi {
   private string baseUrl;
   private string apiKey;
-  public HttpClient client;
-  public OpenWeatherMap() {
-    baseUrl = Environment.GetEnvironmentVariable("OPENWEATHER_API_BASEURL");
-    apiKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY");
+  private HttpClient client;
+  private readonly IConfiguration _configuration; 
+  public OpenWeatherMap(IConfiguration configuration) {
+    _configuration = configuration;
+    baseUrl = _configuration["OpenWeatherMap:BaseUrl"];
+    apiKey = _configuration["OpenWeatherMap:ApiKey"];
     client = new HttpClient();
   }
   public async Task<WeatherResponse> GetWeatherByCity(string city) {
