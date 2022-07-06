@@ -1,32 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace WeatherApp.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IWeatherApi _weatherApi;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherApi weatherApi)
     {
+        _weatherApi = weatherApi;
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet]
+    public async Task<ActionResult> City(string name)
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        try {
+
+          return Ok(await _weatherApi.GetWeatherByCity(name));
+        }
+        catch {
+            return NotFound($"Couldn't find weather for city {name}");
+        }
+    }
+    [HttpGet]
+    public async Task<ActionResult> Zipcode(string zipcode, string countrycode)
+    {
+        try {
+            return Ok(await _weatherApi.GetWeatherByZipcodeCountrycode(zipcode, countrycode));
+        }
+        catch {
+            return NotFound($"Couldn't find weather for zipcode {zipcode} in {countrycode}");
+        }
     }
 }
