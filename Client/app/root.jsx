@@ -10,7 +10,7 @@ import Navbar from "../components/Navbar";
 
 export const meta = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Weather Forecast App",
   viewport: "width=device-width,initial-scale=1",
 });
 
