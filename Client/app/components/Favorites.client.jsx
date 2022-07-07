@@ -7,7 +7,7 @@ export default function Favorites() {
   const FavoriteCards = Object.entries(favorites).map(([key, {city, coordinates}]) => 
     <FavoriteCard key={key} city={city} coordinates={coordinates}/>)
   return (
-    <div className="container mx-auto flex flex-wrap pt-5 px-5">
+    <div className="container mx-auto flex flex-wrap pt-5 px-5 justify-center">
     {FavoriteCards}
     </div>
   )
