@@ -1,11 +1,11 @@
 import { fetch, json } from "@remix-run/node";
 import { useCatch, useLoaderData } from "@remix-run/react";
-import { useCallback, useState } from "react";
-import WeatherCard from "../../components/WeatherCard";
+import { useState } from "react";
+import WeatherCard from "../components/WeatherCard";
 import { Dialog } from "@reach/dialog";
 import dialogStyles from "@reach/dialog/styles.css";
-import { ClientOnly, useHydrated } from "remix-utils";
-import Favorite from "../../components/Favorite.client";
+import { useHydrated } from "remix-utils";
+import Favorite from "../components/Favorite.client";
 
 export function links() {
   return [{rel: "stylesheet", href: dialogStyles}]
