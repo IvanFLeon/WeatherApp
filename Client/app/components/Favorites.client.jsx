@@ -23,7 +23,7 @@ function FavoriteCard({city, coordinates}) {
   }
 
   return (
-    <div onClick={handleClick} className="border rounded p-5 flex-grow mx-3 my-2 shadow hover:bg-gray-100">
+    <div onClick={handleClick} className="border rounded p-5 flex-grow mx-3 my-2 shadow hover:bg-gray-100 cursor-pointer">
       <div>
         <h3 className="text-lg font-semibold">{city}</h3>
       </div>

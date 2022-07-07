@@ -82,13 +82,8 @@ export default function Weather() {
       selectCard(key)
     }}/>)
 
-  const HourlyWeathers =
-  (<table>
-    <tbody>
-    {dailyWeather[selectedCard]?.hourlyWeather.map(hw => 
-      <HourlyWeather data={hw} key={hw.timestamp}/>)}
-    </tbody>
-  </table>)
+  const HourlyWeathers = dailyWeather[selectedCard]?.hourlyWeather.map(hw => 
+      <HourlyWeather data={hw} key={hw.timestamp}/>)
 
   return (
     <div className="flex flex-col items-center">
@@ -99,8 +94,11 @@ export default function Weather() {
       <div className="flex overflow-auto cursor-grab snap-x container">
         {WeatherCards}
       </div>
-      <Dialog aria-label="Day weather information" isOpen={!!selectedCard} onDismiss={() => selectCard("")}>
-        {HourlyWeathers}
+      <Dialog style={{'width': '80%'}} aria-label="Day weather information" isOpen={!!selectedCard} onDismiss={() => selectCard("")}>
+        <h3 className="text-2xl">Hourly weather {selectedCard}</h3>
+        <div className="flex flex-col items-center items-stretch">
+          {HourlyWeathers}
+        </div>
       </Dialog>
     </div>
   )
@@ -108,23 +106,17 @@ export default function Weather() {
 
 function HourlyWeather({ data }) {
   return (
-    <tr>
-      <td>
+    <div className="border-b py-3 flex flex-wrap justify-between items-center">
+      <div className="pr-4 w-40">
         {data.time}
-      </td>
-      <td>
-        {data.minTemp}
-      </td>
-      <td>
-        {data.maxTemp}
-      </td>
-      <td>
-        {data.description}
-      </td>
-      <td>
-        <img src={data.icon} alt="Weather condition icon"/>
-      </td>
-    </tr>
+      </div>
+      <div className="pr-4 w-64">
+        Temp (Max/Min): {data.maxTemp}/{data.minTemp} °C
+      </div>
+      <div className="pl-4">
+        <img class="object-contain w-20" src={data.icon} alt="Weather condition icon"/>
+      </div>
+    </div>
   )
 }
 

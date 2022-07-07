@@ -4,7 +4,7 @@ export default function WeatherCard(dailyWeather) {
   console.log(value)
 
   return (
-    <div onClick={openCard} className="border rounded shadow w-60 p-5 mx-3 flex-shrink-0 snap-center">
+    <div onClick={openCard} className="border rounded shadow w-60 p-5 mx-3 flex-shrink-0 snap-center cursor-pointer hover:bg-gray-100">
       <p className="font-semibold">{formatDate}</p>
       <p>{date}</p>
       <img src={value.hourlyWeather[0].icon} aria-label="Current weather condition icon" className="object-fill"/>

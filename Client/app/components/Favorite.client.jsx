@@ -17,7 +17,7 @@ export default function Favorite({location}) {
 
   return (
     <div>
-      <p onClick={onToggle} className={`pl-1 text-6xl hover:opacity-70 drop-shadow cursor-pointer ${toggleColor}`}>★</p>
+      <p onClick={onToggle} className={`pl-3 mr-3 text-6xl hover:opacity-70 drop-shadow cursor-pointer ${toggleColor}`}>★</p>
       <div className="hidden">
         <input ref={checkboxRef} type='checkbox' checked={isFavorite}></input>
         <label>Favorite</label>
