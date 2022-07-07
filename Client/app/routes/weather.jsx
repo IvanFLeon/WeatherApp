@@ -12,6 +12,7 @@ export function links() {
 }
 
 export async function loader({request}) {
+  const { BACKEND_BASEURL } = process.env;
   function groupBy(xs, key) {
     return xs.reduce(function(rv, x) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -27,15 +28,15 @@ export async function loader({request}) {
   var res;
   switch(searchtype) {
     case 'city':
-      res = await fetch(`https://localhost:7175/WeatherForecast/City?name=${query}`);
+      res = await fetch(`${BACKEND_BASEURL}/WeatherForecast/City?name=${query}`);
       break;
     case 'zipcode':
       const [zipcode, countrycode] = query.split(',');
-      res = await fetch(`https://localhost:7175/WeatherForecast/Zipcode?zipcode=${zipcode}&countrycode=${countrycode}`);
+      res = await fetch(`${BACKEND_BASEURL}/WeatherForecast/Zipcode?zipcode=${zipcode}&countrycode=${countrycode}`);
       break;
     case 'location':
       const [latitude,longitude] = query.split(',');
-      res = await fetch(`https://localhost:7175/WeatherForecast/Location?latitude=${latitude}&longitude=${longitude}`);
+      res = await fetch(`${BACKEND_BASEURL}/WeatherForecast/Location?latitude=${latitude}&longitude=${longitude}`);
       break;
     default:
       throw new Error("Invalid searchtype please use one of the following: city, zipcode, location");
