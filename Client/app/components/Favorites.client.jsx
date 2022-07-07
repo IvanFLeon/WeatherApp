@@ -7,7 +7,7 @@ export default function Favorites() {
   const FavoriteCards = Object.entries(favorites).map(([key, {city, coordinates}]) => 
     <FavoriteCard key={key} city={city} coordinates={coordinates}/>)
   return (
-    <div>
+    <div className="container mx-auto flex flex-wrap pt-5 px-5">
     {FavoriteCards}
     </div>
   )
@@ -23,9 +23,9 @@ function FavoriteCard({city, coordinates}) {
   }
 
   return (
-    <div onClick={handleClick}>
+    <div onClick={handleClick} className="border rounded p-5 flex-grow mx-3 my-2 shadow hover:bg-gray-100">
       <div>
-        <h3>{city}</h3>
+        <h3 className="text-lg font-semibold">{city}</h3>
       </div>
       <div>
         <div>

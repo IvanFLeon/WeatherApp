@@ -11,18 +11,18 @@ public class OpenWeatherMap : IWeatherApi {
     client = new HttpClient();
   }
   public async Task<WeatherResponse> GetWeatherByCity(string city) {
-    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?q={city}&appid={apiKey}");
+    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?q={city}&units=metric&appid={apiKey}");
     response.EnsureSuccessStatusCode();
     return Convert(await response.Content.ReadFromJsonAsync<OpenWeatherResponse>());
   }
   public async Task<WeatherResponse> GetWeatherByZipcodeCountrycode(string zipcode, string countrycode) {
-    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?zip={zipcode},{countrycode}&appid={apiKey}");
+    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?zip={zipcode},{countrycode}&units=metric&appid={apiKey}");
     response.EnsureSuccessStatusCode();
     return Convert(await response.Content.ReadFromJsonAsync<OpenWeatherResponse>());
   }
 
   public async Task<WeatherResponse> GetWeatherByLocation(string latitude, string longitude) {
-    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?lat={latitude}&lon={longitude}&appid={apiKey}");
+    HttpResponseMessage response = await client.GetAsync($"{baseUrl}?lat={latitude}&lon={longitude}&units=metric&appid={apiKey}");
     response.EnsureSuccessStatusCode();
     return Convert(await response.Content.ReadFromJsonAsync<OpenWeatherResponse>());
   }
@@ -31,7 +31,7 @@ public class OpenWeatherMap : IWeatherApi {
     WeatherResponse weatherResponse = new WeatherResponse();
     weatherResponse.HourlyWeathers = response.list.Select<Data, HourlyWeather>(d => new HourlyWeather {
       Description = d.weather[0].description,
-      Icon = _configuration["OpenWeatherMap:IconUrl"] + d.weather[0].icon + ".png",
+      Icon = _configuration["OpenWeatherMap:IconUrl"] + d.weather[0].icon + "@4x.png",
       MaxTemp = d.main.temp_max,
       MinTemp = d.main.temp_min,
       Timestamp = d.dt

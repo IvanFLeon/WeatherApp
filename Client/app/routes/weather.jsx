@@ -91,10 +91,14 @@ export default function Weather() {
   </table>)
 
   return (
-    <div>
-      <h1>{location.city}</h1>
-      {isHydrated && <Favorite location={location} key={location.city}/>}
-      {WeatherCards}
+    <div className="flex flex-col items-center">
+      <div className="flex items-center">
+        <h1 className="text-5xl text-center py-10 inline">{location.city}</h1>
+        {isHydrated && <Favorite location={location} key={location.city} />}
+      </div>
+      <div className="flex overflow-auto cursor-grab snap-x container">
+        {WeatherCards}
+      </div>
       <Dialog aria-label="Day weather information" isOpen={!!selectedCard} onDismiss={() => selectCard("")}>
         {HourlyWeathers}
       </Dialog>
