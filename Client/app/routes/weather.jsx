@@ -127,3 +127,9 @@ export function CatchBoundary() {
     <h2>{caught.data.message}</h2>
   )
 }
+
+export function ErrorBoundary() {
+  return (
+    <p className="text-5xl p-10 leading-normal">Something unexpected happened, please try again later :(</p>
+  )
+}
